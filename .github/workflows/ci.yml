@@ -51,7 +51,6 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
-    if: hashFiles('data/processed/*.jsonl') != ''
     steps:
       - uses: actions/checkout@v4
       - run: docker build -t eu-regulation-rag .

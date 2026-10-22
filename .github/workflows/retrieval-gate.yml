@@ -8,7 +8,6 @@ on:
 jobs:
   gate:
     runs-on: ubuntu-latest
-    if: hashFiles('eval/baseline.json') != '' && hashFiles('data/processed/*.jsonl') != ''
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
