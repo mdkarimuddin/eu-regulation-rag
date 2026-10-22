@@ -1,0 +1,21 @@
+# Local stack: Postgres with pgvector, plus the API. ANTHROPIC_API_KEY comes from your shell, never from this file.
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_PASSWORD: eurag
+      POSTGRES_DB: eurag
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      EURAG_PG_DSN: postgresql://postgres:eurag@db:5432/eurag
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+    ports: ["8000:8000"]

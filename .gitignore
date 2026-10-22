@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.coverage
+.ruff_cache/
+*.egg-info/
+.env
+index/
+results/*
+!results/ablation.md
+!results/ablation.json
+data/raw/

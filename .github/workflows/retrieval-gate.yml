@@ -1,0 +1,23 @@
+# Fails a pull request when hybrid recall@5 on the gold set drops by more than 3 points against eval/baseline.json.
+# Runs only once data/processed/*.jsonl and eval/baseline.json have been committed (see README, "Reproduce").
+name: Retrieval gate
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    if: hashFiles('eval/baseline.json') != '' && hashFiles('data/processed/*.jsonl') != ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-bge-small-v1
+      - run: pip install -e ".[embeddings]"
+      - run: eurag check-gold
+      - run: eurag gate --max-drop 0.03
